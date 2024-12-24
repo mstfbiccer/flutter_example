@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_example/providers/theme_provider.dart';
 import 'package:flutter_example/widgets/common/category_list_widget.dart';
 import 'package:flutter_example/widgets/common/product_list_widget.dart';
+import 'package:flutter_example/widgets/common/recent_products.dart';
 import 'package:flutter_example/widgets/home/banner_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +68,8 @@ class HomeScreenContent extends StatelessWidget {
             child: Text('Tema Değiştir'),
           ),
           ProductList(title: "Öne Çıkanlar"),
-          CategoryListWidget()
+          CategoryListWidget(),
+          RecentProducts()
         ],
       ),
     );
