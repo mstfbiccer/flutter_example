@@ -1,6 +1,6 @@
 import 'package:confetti/confetti.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_example/layouts/main_layout.dart';
 import 'package:flutter_example/providers/auth_provider.dart';
 import 'package:flutter_example/services/auth/login.dart';
@@ -21,8 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isAuthenticated = false;
 
   // usernamecontroller with default value
-  final TextEditingController _usernameController = TextEditingController(text: 'mor_2314');
-  final TextEditingController _passwordController = TextEditingController(text: '83r5^_');
+  final TextEditingController _usernameController =
+      TextEditingController(text: 'mor_2314');
+  final TextEditingController _passwordController =
+      TextEditingController(text: '83r5^_');
   final ConfettiController _confettiController =
       ConfettiController(duration: const Duration(seconds: 2));
   bool _isLoading = false;
@@ -30,51 +32,72 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final AppDb _database = AppDb(); // Veritabanı nesnesini oluşturduk
 
-Future<void> _authenticate() async {
-  try {
-    // Check for available biometric types
-    final List<BiometricType> availableBiometrics =
-        await _localAuth.getAvailableBiometrics();
-
-    if (availableBiometrics.contains(BiometricType.face)) {
-      // Face/iris recognition supported
-      print("Göz ve yüz tanıma mevcut.");
-    } else if (availableBiometrics.contains(BiometricType.fingerprint)) {
-      // Fingerprint supported
-      print("Parmak izi tanıma mevcut.");
-    } else {
-      // No biometrics available
-      print("Biometrik tanıma mevcut değil.");
-    }
-
-    // Authenticate using available biometrics
-    final bool authenticated = await _localAuth.authenticate(
-      localizedReason: 'Lütfen kimlik doğrulaması yapın.',
-      
-      options: const AuthenticationOptions(
-        biometricOnly: true,
-        stickyAuth: true,
-      ),
+  Future<void> _firebaseRequestPermission() async {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
     );
+    print('User granted permission: ${settings.authorizationStatus}');
+    // token 
 
-    setState(() {
-      _isAuthenticated = authenticated;
-    });
-
-    if (authenticated) {
-      // Add any additional success logic here
-      print("Authenticated successfully!");
-    } else {
-      print("Authentication failed.");
-    }
-  } catch (e) {
-    print("Authentication error: $e");
   }
-}
+
+  Future<void> _authenticate() async {
+    try {
+      // Check for available biometric types
+      final List<BiometricType> availableBiometrics =
+          await _localAuth.getAvailableBiometrics();
+
+      if (availableBiometrics.contains(BiometricType.face)) {
+        // Face/iris recognition supported
+        print("Göz ve yüz tanıma mevcut.");
+      } else if (availableBiometrics.contains(BiometricType.fingerprint)) {
+        // Fingerprint supported
+        print("Parmak izi tanıma mevcut.");
+      } else {
+        // No biometrics available
+        print("Biometrik tanıma mevcut değil.");
+      }
+
+      // Authenticate using available biometrics
+      final bool authenticated = await _localAuth.authenticate(
+        localizedReason: 'Lütfen kimlik doğrulaması yapın.',
+        options: const AuthenticationOptions(
+          biometricOnly: true,
+          stickyAuth: true,
+        ),
+      );
+
+      setState(() {
+        _isAuthenticated = authenticated;
+      });
+
+      if (authenticated) {
+        // Add any additional success logic here
+        print("Authenticated successfully!");
+      } else {
+        print("Authentication failed.");
+      }
+    } catch (e) {
+      print("Authentication error: $e");
+    }
+  }
 
   @override
   void initState() {
+    _firebaseRequestPermission();
+    _getToken();
     super.initState();
+  }
+
+  // token getter from firebase
+  Future<void> _getToken() async {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    String? token = await _firebaseMessaging.getToken();
+    print('FCM TOKEN: $token');
   }
 
   @override
@@ -85,8 +108,6 @@ Future<void> _authenticate() async {
     _database.close(); // Veritabanını kapatmayı unutma
     super.dispose();
   }
-
-
 
   Future<void> _handleLogin() async {
     setState(() {

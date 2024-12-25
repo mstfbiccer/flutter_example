@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297499782303",
+    "project_id": "gelecek-c262e",
+    "storage_bucket": "gelecek-c262e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297499782303:android:e909cdedddbef4779886aa",
+        "android_client_info": {
+          "package_name": "com.example.flutter_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr9AyR3ingGxoEHqcDPK4xIeDJaxzlc5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

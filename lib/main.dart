@@ -3,10 +3,12 @@ import 'package:flutter_example/layouts/main_layout.dart';
 import 'package:flutter_example/providers/theme_provider.dart';
 import 'package:flutter_example/providers/auth_provider.dart';
 import 'package:flutter_example/screens/login.dart';
+import 'package:flutter_example/services/notification/firebase_services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseService.initializeFirebase();
 
   final authProvider = AuthProvider();
   await authProvider.loadToken();
@@ -29,6 +31,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context);
+
+    FirebaseService.getToken();
+    FirebaseService.listenToMessages();
+
     print('Token: ${authProvider.token}');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
