@@ -35,7 +35,7 @@ class _DetailState extends State<Detail> {
         isShowFlashIcon: true,
         delayMillis: 500,
         cameraFace: CameraFace.back,
-        scanFormat: ScanFormat.ALL_FORMATS,
+        scanFormat: ScanFormat.ONLY_BARCODE
         );
         print("----------------Barcode------------------: $code");
       }

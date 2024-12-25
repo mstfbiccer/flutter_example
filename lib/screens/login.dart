@@ -17,11 +17,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final auth = LocalAuthentication();
-  String authorized = " not authorized";
-  bool _canCheckBiometric = false;
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final LocalAuthentication _localAuth = LocalAuthentication();
+  bool _isAuthenticated = false;
+
+  // usernamecontroller with default value
+  final TextEditingController _usernameController = TextEditingController(text: 'mor_2314');
+  final TextEditingController _passwordController = TextEditingController(text: '83r5^_');
   final ConfettiController _confettiController =
       ConfettiController(duration: const Duration(seconds: 2));
   bool _isLoading = false;
@@ -29,86 +30,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final AppDb _database = AppDb(); // Veritabanı nesnesini oluşturduk
 
-  Future<void> _fingerPrintLogin() async {
-    try {
-      final isAvailable = await auth.canCheckBiometrics;
-      print(isAvailable);
+Future<void> _authenticate() async {
+  try {
+    // Check for available biometric types
+    final List<BiometricType> availableBiometrics =
+        await _localAuth.getAvailableBiometrics();
 
-      if (!isAvailable) {
-        setState(() {
-          _errorMessage = 'Parmak izi doğrulama desteklenmiyor.';
-        });
-        return;
-      }
-
-      final didAuthenticate = await auth.authenticate(
-        localizedReason: 'Parmak izi okutmalısınız.',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-        ),
-      );
-
-      print("didAuthenticate: $didAuthenticate");
-
-      if (didAuthenticate) {
-        // Başarılı giriş durumunda işlemler
-        final username =
-            'biometric_user'; // Parmak izi ile giriş yapan varsayılan kullanıcı
-        await _database.insertUser(username); // Drift'e kaydet
-
-        Provider.of<AuthProvider>(context, listen: false)
-            .setToken('biometric_token');
-
-        _confettiController.play();
-
-        Future.delayed(const Duration(seconds: 2), () {
-          if (context.mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const MainLayout()),
-            );
-          }
-        });
-      }
-    } catch (e) {
-      setState(() {
-        print(e);
-        _errorMessage = 'Parmak izi doğrulama başarısız: $e';
-      });
-    }
-  }
-
- Future<void> _checkBiometric() async {
-    bool canCheckBiometric = false;
-
-    try {
-      canCheckBiometric = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      print(e);
+    if (availableBiometrics.contains(BiometricType.face)) {
+      // Face/iris recognition supported
+      print("Göz ve yüz tanıma mevcut.");
+    } else if (availableBiometrics.contains(BiometricType.fingerprint)) {
+      // Fingerprint supported
+      print("Parmak izi tanıma mevcut.");
+    } else {
+      // No biometrics available
+      print("Biometrik tanıma mevcut değil.");
     }
 
-    if (!mounted) return;
+    // Authenticate using available biometrics
+    final bool authenticated = await _localAuth.authenticate(
+      localizedReason: 'Lütfen kimlik doğrulaması yapın.',
+      
+      options: const AuthenticationOptions(
+        biometricOnly: true,
+        stickyAuth: true,
+      ),
+    );
 
     setState(() {
-      _canCheckBiometric = canCheckBiometric;
+      _isAuthenticated = authenticated;
     });
-  }
 
-
- Future _getAvailableBiometric() async {
-    List<BiometricType> availableBiometric = [];
-
-    try {
-      availableBiometric = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print(e);
+    if (authenticated) {
+      // Add any additional success logic here
+      print("Authenticated successfully!");
+    } else {
+      print("Authentication failed.");
     }
+  } catch (e) {
+    print("Authentication error: $e");
   }
+}
 
   @override
   void initState() {
-     _checkBiometric();
-    _getAvailableBiometric();
     super.initState();
   }
 
@@ -120,6 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _database.close(); // Veritabanını kapatmayı unutma
     super.dispose();
   }
+
+
 
   Future<void> _handleLogin() async {
     setState(() {
@@ -211,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       : const Text('Giriş Yap'),
                 ),
                 ElevatedButton(
-                    onPressed: _fingerPrintLogin,
+                    onPressed: _authenticate,
                     child: const Text('Parmak İzi ile Giriş Yap')),
               ],
             ),
