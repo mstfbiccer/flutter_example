@@ -14,6 +14,7 @@ class NavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
         BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Kategoriler'),
         BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: 'Sepetim'),
+        BottomNavigationBarItem(icon: Icon(Icons.subscript), label: 'Logs'),
         BottomNavigationBarItem(icon: Icon(Icons.exit_to_app), label: 'Çıkış Yap'),
       ],
     );

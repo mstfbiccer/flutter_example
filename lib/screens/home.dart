@@ -38,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant HomeScreen _currentTheme) {
-    super.didUpdateWidget(_currentTheme);
+  void didUpdateWidget(covariant HomeScreen currentTheme) {
+    super.didUpdateWidget(currentTheme);
     print('didUpdateWidget');
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_example/services/products/fetch_products.dart';
 
 class Detail extends StatefulWidget {
@@ -18,8 +19,15 @@ class _DetailState extends State<Detail> {
     _product = FetchProducts.productById(widget.id); 
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+     void scanQrCode() {
+        FlutterBarcodeScanner.scanBarcode("#000000", "Cancel", true, ScanMode.QR).then((value) {
+            print(value);
+        });
+      }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Ürün Detayı"),
@@ -71,9 +79,17 @@ class _DetailState extends State<Detail> {
                         color: Colors.black87,
                       ),
                     ),
+                     ElevatedButton(
+                      onPressed: () {
+                        scanQrCode();
+                      },
+                      child: const Text("Yeni Ürün Ekle"),
+                    ),
                   ],
                 ),
+               
               ),
+              
             );
           }
         },

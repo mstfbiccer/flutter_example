@@ -4,6 +4,7 @@ import "package:flutter_example/screens/basket.dart";
 import "package:flutter_example/screens/category.dart";
 import "package:flutter_example/screens/home.dart";
 import "package:flutter_example/screens/login.dart";
+import "package:flutter_example/screens/logs.dart";
 import "package:flutter_example/widgets/common/nav_bar.dart";
 import "package:provider/provider.dart";
 
@@ -18,15 +19,17 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
-  static const List<Widget> _pages = <Widget> [
+  static final List<Widget> _pages = <Widget> [
     HomeScreen(),
     Category(),
     Basket(),
+    LogScreen()
+    
   ];
 
   void _onTapFnc(int index) {
     print(index);
-    if (index == 3) {
+    if (index == 4) {
       Provider.of<AuthProvider>(context, listen: false).clearToken();
       Navigator.pushReplacement(
         context,

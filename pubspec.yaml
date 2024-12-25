@@ -41,7 +41,14 @@ dependencies:
   path_provider: ^2.0.0
   shared_preferences: ^2.3.4
   drift: ^2.22.1 
+  confetti: ^0.7.0
+  sqlite3_flutter_libs: ^0.5.28
+  local_auth: ^2.3.0
+  qr_flutter: ^4.1.0
+  flutter_barcode_scanner: ^2.0.0
 dev_dependencies:
+  drift_dev: ^2.9.0
+  build_runner: ^2.4.5
   flutter_test:
     sdk: flutter
 

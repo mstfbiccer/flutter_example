@@ -9,7 +9,6 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dbHelper = DatabaseHelper();
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

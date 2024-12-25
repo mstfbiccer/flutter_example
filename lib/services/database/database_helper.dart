@@ -42,7 +42,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getVisitedProducts() async {
     final db = await database;
-    return db.query('visited_products', orderBy: 'id DESC');
+    return db.query('visited_products', orderBy: 'id DESC', limit: 5);
   }
 
   Future<void> clearVisitedProducts() async {

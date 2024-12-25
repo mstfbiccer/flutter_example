@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example/widgets/common/nav_bar.dart';
 import 'package:flutter_example/widgets/common/product_list_widget.dart';
 
 class Category extends StatefulWidget {
