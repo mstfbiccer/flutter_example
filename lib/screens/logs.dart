@@ -5,7 +5,7 @@ import 'package:flutter_example/services/database/orm.dart'; // Drift veritaban�
 class LogScreen extends StatelessWidget {
   final AppDb database = AppDb(); // Veritabanı burada tanımlanıyor
 
-  LogScreen({Key? key}) : super(key: key);
+  LogScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

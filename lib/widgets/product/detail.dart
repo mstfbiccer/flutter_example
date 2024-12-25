@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_example/services/products/fetch_products.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class Detail extends StatefulWidget {
   final int id;
@@ -23,10 +23,21 @@ class _DetailState extends State<Detail> {
 
   @override
   Widget build(BuildContext context) {
-     void scanQrCode() {
-        FlutterBarcodeScanner.scanBarcode("#000000", "Cancel", true, ScanMode.QR).then((value) {
-            print(value);
-        });
+     void scanQrCode() async{
+       final code = await SimpleBarcodeScanner.scanBarcode(
+        context,
+        barcodeAppBar: const BarcodeAppBar(
+          appBarTitle: 'Test',
+          centerTitle: false,
+          enableBackButton: true,
+          backButtonIcon: Icon(Icons.arrow_back_ios),
+        ),
+        isShowFlashIcon: true,
+        delayMillis: 500,
+        cameraFace: CameraFace.back,
+        scanFormat: ScanFormat.ALL_FORMATS,
+        );
+        print("----------------Barcode------------------: $code");
       }
     return Scaffold(
       appBar: AppBar(
