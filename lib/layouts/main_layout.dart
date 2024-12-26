@@ -6,8 +6,8 @@ import "package:flutter_example/screens/category.dart";
 import "package:flutter_example/screens/home.dart";
 import "package:flutter_example/screens/login.dart";
 import "package:flutter_example/screens/logs.dart";
-import "package:flutter_example/services/notification/web_socket.dart";
 import "package:flutter_example/widgets/common/nav_bar.dart";
+import "package:location/location.dart";
 import "package:provider/provider.dart";
 
 class MainLayout extends StatefulWidget {
@@ -20,6 +20,15 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
+  Location location = Location();
+  late LocationData _locationData;
+
+
+  Future<bool> requestPermission() async {
+    final permission = await location.requestPermission();
+    print("Permission: $permission");
+    return permission == PermissionStatus.granted;
+  }
 
   Future _firebaseForegroundMessage() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -35,6 +44,17 @@ class _MainLayoutState extends State<MainLayout> {
     });
   }
 
+  Future _getLocation() async {
+    try {
+      print("tesst");
+      _locationData = await location.getLocation();
+      print(PermissionStatus.granted);
+      print("Location: $_locationData");
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+   
   static final List<Widget> _pages = <Widget> [
     HomeScreen(),
     Category(),
@@ -43,11 +63,18 @@ class _MainLayoutState extends State<MainLayout> {
     
   ];
 
+
+
   @override
   void initState() {
-    super.initState();
-
-
+    super.initState(); 
+    requestPermission();
+    _getLocation();
+    location.enableBackgroundMode(enable: true);
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      print("Location: ${currentLocation.latitude} ${currentLocation.longitude}");
+      // Use current location
+    });
   }
 
   void _onTapFnc(int index) {
