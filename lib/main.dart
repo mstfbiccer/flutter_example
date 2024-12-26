@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseService.getToken();
     FirebaseService.listenToMessages();
     print('Token: ${authProvider.token}');
-    webSocketListener = WebSocketListener(url: 'wss://ws.postman-echo.com/raw');
+    webSocketListener = WebSocketListener(url: 'wss://echo.websocket.org');
     webSocketListener.connect();
 
     print("WebSocket called: ${webSocketListener.isConnected}");
