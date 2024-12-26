@@ -6,6 +6,7 @@ import "package:flutter_example/screens/category.dart";
 import "package:flutter_example/screens/home.dart";
 import "package:flutter_example/screens/login.dart";
 import "package:flutter_example/screens/logs.dart";
+import "package:flutter_example/services/notification/web_socket.dart";
 import "package:flutter_example/widgets/common/nav_bar.dart";
 import "package:provider/provider.dart";
 
@@ -19,7 +20,6 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
-
 
   Future _firebaseForegroundMessage() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -46,7 +46,8 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
-    _firebaseForegroundMessage();
+
+
   }
 
   void _onTapFnc(int index) {
