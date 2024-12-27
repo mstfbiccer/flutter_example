@@ -3,9 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example/layouts/main_layout.dart';
 import 'package:flutter_example/providers/auth_provider.dart';
+import 'package:flutter_example/providers/navigation_provider.dart';
 import 'package:flutter_example/services/auth/login.dart';
 import 'package:flutter_example/services/database/crud.dart';
 import 'package:flutter_example/services/database/orm.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -17,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // widget title state set edilebilir olmalı
   final LocalAuthentication _localAuth = LocalAuthentication();
   bool _isAuthenticated = false;
 
@@ -92,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _getToken();
     super.initState();
   }
-
+  
   // token getter from firebase
   Future<void> _getToken() async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;

@@ -59,8 +59,7 @@ class _MainLayoutState extends State<MainLayout> {
     HomeScreen(),
     Category(),
     Basket(),
-    LogScreen()
-    
+    LogScreen()    
   ];
 
 
@@ -76,6 +75,18 @@ class _MainLayoutState extends State<MainLayout> {
       // Use current location
     });
   }
+
+
+ @override
+  void didUpdateWidget(covariant MainLayout oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("MainLayout widget updated!");
+    // Eğer güncellenen widget üzerinde bir işlem yapmak istiyorsanız:
+    if (_currentIndex != 0) {
+      print("Current index has changed: $_currentIndex");
+    }
+  }
+
 
   void _onTapFnc(int index) {
     print(index);
@@ -101,5 +112,4 @@ class _MainLayoutState extends State<MainLayout> {
       bottomNavigationBar: NavBar(currentIndex: _currentIndex, onTap: _onTapFnc)
     );
   }
-}   
-
+}    

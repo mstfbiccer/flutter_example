@@ -3,10 +3,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   String? _token;
+    bool _isAuthenticated = false;
+
 
   String? get token => _token;
 
-  bool get isAuthenticated => _token != null;
+  bool get isAuthenticated => _isAuthenticated;
+  
+    set isAuthenticated(bool value) {
+    _isAuthenticated = value;
+    notifyListeners();
+  }
 
   Future<void> setToken(String token) async {
     _token = token;
@@ -20,6 +27,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> loadToken() async {
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('auth_token');
+    _isAuthenticated = true;
     notifyListeners();
   }
 
